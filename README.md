@@ -6,11 +6,11 @@ In this code-along lesson, we'll cover nested forms that can create multiple obj
 
 ## Objectives
 
-1. Create models for each class of objects
-2. Structure data that a controller action will receive to handle multiple objects
-3. Structure the HTML in `.erb` files that handle nesting
-4. Create a view file that displays the objects back to the user
-5. Create two controller actions that serve up the form and process the data from the form
+1.  Create models for each class of objects
+2.  Structure data that a controller action will receive to handle multiple objects
+3.  Structure the HTML in `.erb` files that handle nesting
+4.  Create a view file that displays the objects back to the user
+5.  Create two controller actions that serve up the form and process the data from the form
 
 ## Forms That Create Multiple Objects
 
@@ -75,7 +75,7 @@ Here, exactly like with our `Student` class, we have an `attr_reader` for `name`
 
 ## Creating the Form
 
-The first thing we need is to create the form. For later use in the controller, we'll call this file `new.erb`. 
+The first thing we need is to create the form. For later use in the controller, we'll call this file `new.erb`.
 
 Before we dive into the HTML, let's think about how we want to structure the data our controller action will receive. Typically, if we were just doing student information, we would expect the `params` hash to look something like this:
 
@@ -172,17 +172,17 @@ In this form, a given `course`'s `name` value is stored in `student[course][name
 We need to once again restructure how we want to store data in the `params` hash. To allow for multiple courses, the `courses` key should store an array of nested hashes:
 
 ```ruby
-params = { 
+params = {
   "student" => {
     "name" => "Vic",
     "grade" => "12",
     "courses" => [
       {
-        "name" => "AP US History", 
+        "name" => "AP US History",
         "topic" => "History"
-      }, 
+      },
       {
-        "name" => "AP Human Geography", 
+        "name" => "AP Human Geography",
         "topic" => "History"
       }
     ]
@@ -227,7 +227,6 @@ my_hash["student"]["courses"][0]["name"]
 ```
 
 ERB makes it even easier on us. Instead of manually indexing each entry, we can use an empty array (`[]`) in our form view, and ERB will automagically index the array for us, turning `my_hash["student"]["courses"][0]["name"]` into `student[courses][][name]`. The `[]` is some ERB magic that we just need to accept and use. It saves us time and simplifies our code!
-
 
 ## The Display View
 
@@ -287,13 +286,13 @@ In this controller action, we first create a new `Student` using the info stored
 Then we iterate over `params[:student][:courses]`, which is an array containing a series of hashes that each store individual course information:
 
 ```ruby
-[ 
+[
   0 => {
-    "name" => "AP US History", 
+    "name" => "AP US History",
     "topic" => "History"
-  }, 
+  },
   1 => {
-    "name" => "AP Human Geography", 
+    "name" => "AP Human Geography",
     "topic" => "History"
   }
 ]
